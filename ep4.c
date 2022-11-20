@@ -131,56 +131,75 @@ int escolheJogada (int *** tab, int n, int cor, int *lin, int *col){
 }
 
 int podeGanhar(int ***tab, int n, int cor, int *lin, int *col){
+    int zeroCount;
     //Checando Rows
     int ganhou = TRUE;
+    zeroCount = 0;
     
     for(int i = 0; i < n; i++){
         for(int j = 0; j < n; j++){
-            for(int k = 0; k < n-1; k++){
-                if(tab[i][j][k] != cor){
+            for(int k = 0; k < n; k++){
+                if(tab[i][j][k] == -1 *cor){
                     ganhou = FALSE;
                     break;
                 }
+                if(tab[i][j][k] == 0){
+                    zeroCount++;
+                    *lin = i;
+                    *col = j;
+                    if(zeroCount > 1){
+                        ganhou = FALSE;
+                        break;
+                    }
+                }
             }
-            if(ganhou && tab[i][j][n-1] == 0){
-                *lin = i;
-                *col = j;
-                return ganhou;
-            }
+            if(ganhou && zeroCount == 1) return ganhou;
         }
     }
 
     ganhou = TRUE;
+    zeroCount = 0;
     for(int i = 0; i < n; i++){
         for(int j = 0; j < n; j++){
-            for(int k = 0; k < n-1; k++){
-                if(tab[k][i][j] != cor){
+            for(int k = 0; k < n; k++){
+                if(tab[k][i][j] == -1 *cor){
                     ganhou = FALSE;
                     break;
                 }
+                if(tab[k][i][j] == 0){
+                    zeroCount++;
+                    *lin = k;
+                    *col = i;
+                    if(zeroCount > 1){
+                        ganhou = FALSE;
+                        break;
+                    }
+                }
             }
-            if(ganhou && tab[n-1][i][j] == 0){
-                *lin = n-1;
-                *col = i;
-                return ganhou;
-            }
+            if(ganhou && zeroCount == 1) return ganhou;
         }
     }
 
     ganhou = TRUE;
+    zeroCount = 0;
     for(int i = 0; i < n; i++){
         for(int j = 0; j < n; j++){
-            for(int k = 0; k < n -1; k++){
-                if(tab[i][k][j] != cor){
+            for(int k = 0; k < n; k++){
+                if(tab[i][k][j] == -1 *cor){
                     ganhou = FALSE;
                     break;
                 }
+                if(tab[i][k][j] == 0){
+                    zeroCount++;
+                    *lin = i;
+                    *col = k;
+                    if(zeroCount > 1){
+                        ganhou = FALSE;
+                        break;
+                    }
+                }
             }
-            if(ganhou && tab[i][n-1][j] == 0){
-                *lin = i;
-                *col = n-1;
-                return ganhou;
-            }
+            if(ganhou && zeroCount == 1) return ganhou;
         }
     }
 
@@ -189,184 +208,245 @@ int podeGanhar(int ***tab, int n, int cor, int *lin, int *col){
     int startCol = 0;
 
     ganhou = TRUE;
-    for(int i = 0; i < n-1; i++){
-        if(tab[startLin][startCol][i] != cor){
-            ganhou = FALSE;
-            break;
-        }
+    zeroCount = 0;
+    for(int i = 0; i < n; i++){
+        if(tab[startLin][startCol][i] == -1 *cor){
+                    ganhou = FALSE;
+                    break;
+                }
+                if(tab[startLin][startCol][i] == 0){
+                    zeroCount++;
+                    *lin = startLin;
+                    *col = startCol;
+                    if(zeroCount > 1){
+                        ganhou = FALSE;
+                        break;
+                    }
+                }
         startLin++;
         startCol++;
     }
-    if(ganhou && tab[startLin + 1][startCol + 1][n -1] == 0){
-                *lin = startLin + 1;
-                *col = startCol + 1;
-                return ganhou;
-    }
+    if(ganhou && zeroCount == 1) return ganhou;
 
     startLin = 0;
     startCol = n-1;
 
     ganhou = TRUE;
-    for(int i = 0; i < n - 1; i++){
-        if(tab[startLin][startCol][i] != cor){
-            ganhou = FALSE;
-            break;
-        }
+    zeroCount = 0;
+    for(int i = 0; i < n; i++){
+        if(tab[startLin][startCol][i] == -1 *cor){
+                    ganhou = FALSE;
+                    break;
+                }
+                if(tab[startLin][startCol][i] == 0){
+                    zeroCount++;
+                    *lin = startLin;
+                    *col = startCol;
+                    if(zeroCount > 1){
+                        ganhou = FALSE;
+                        break;
+                    }
+                }
         startLin++;
         startCol--;
     }
-    if(ganhou && tab[startLin + 1][startCol - 1][n -1] == 0){
-                *lin = startLin + 1;
-                *col = startCol - 1;
-                return ganhou;
-    }
+    if(ganhou && zeroCount == 1) return ganhou;
 
     startLin = n-1;
     startCol = 0;
 
     ganhou = TRUE;
-    for(int i = 0; i < n-1; i++){
-        if(tab[startLin][startCol][i] != cor){
-            ganhou = FALSE;
-            break;
-        }
+    zeroCount = 0;
+    for(int i = 0; i < n; i++){
+        if(tab[startLin][startCol][i] == -1 *cor){
+                    ganhou = FALSE;
+                    break;
+                }
+                if(tab[startLin][startCol][i] == 0){
+                    zeroCount++;
+                    *lin = startLin;
+                    *col = startCol;
+                    if(zeroCount > 1){
+                        ganhou = FALSE;
+                        break;
+                    }
+                }
         startLin--;
         startCol++;
     }
-    if(ganhou && tab[startLin - 1][startCol + 1][n -1] == 0){
-                *lin = startLin - 1;
-                *col = startCol + 1;
-                return ganhou;
-    }
+    if(ganhou && zeroCount == 1) return ganhou;
 
     startLin = n-1;
     startCol = n-1;
 
     ganhou = TRUE;
-    for(int i = 0; i < n -1; i++){
-        if(tab[startLin][startCol][i] != cor){
-            ganhou = FALSE;
-            break;
-        }
+    zeroCount = 0;
+    for(int i = 0; i < n; i++){
+        if(tab[startLin][startCol][i] == -1 *cor){
+                    ganhou = FALSE;
+                    break;
+                }
+                if(tab[startLin][startCol][i] == 0){
+                    zeroCount++;
+                    *lin = startLin;
+                    *col = startCol;
+                    if(zeroCount > 1){
+                        ganhou = FALSE;
+                        break;
+                    }
+                }
         startLin--;
         startCol--;
     }
-    if(ganhou && tab[startLin - 1][startCol - 1][n -1] == 0){
-                *lin = startLin - 1;
-                *col = startCol - 1;
-                return ganhou;
-    }
+    if(ganhou && zeroCount == 1) return ganhou;
 
     //Checando diagonais das  9 faces
     ganhou = TRUE;
+    zeroCount = 0;
     for(int i = 0; i < n; i++){
         int j = 0;
         int k = 0;
         for(int a = 0; a < n; a++){
-            if(tab[i][j][k]!= cor){
-                ganhou = FALSE;
-                break;
-            }
+            if(tab[i][j][k] == -1 *cor){
+                    ganhou = FALSE;
+                    break;
+                }
+                if(tab[i][j][k] == 0){
+                    zeroCount++;
+                    *lin = i;
+                    *col = j;
+                    if(zeroCount > 1){
+                        ganhou = FALSE;
+                        break;
+                    }
+                }
             j++;
             k++;
         }
-        if(ganhou && tab[i][j+1][k+1] == 0){
-                *lin = i;
-                *col = j+1;
-                return ganhou;
-        }
+        if(ganhou && zeroCount == 1) return ganhou;
 
         ganhou = TRUE;
+        zeroCount = 0;
         j = 0;
         k = n-1;
-        for(int a = 0; a < n-1; a++){
-            if(tab[i][j][k]!= cor){
-                ganhou = FALSE;
-                break;
-            }
+        for(int a = 0; a < n; a++){
+            if(tab[i][j][k] == -1 *cor){
+                    ganhou = FALSE;
+                    break;
+                }
+                if(tab[i][j][k] == 0){
+                    zeroCount++;
+                    *lin = i;
+                    *col = j;
+                    if(zeroCount > 1){
+                        ganhou = FALSE;
+                        break;
+                    }
+                }
             j++;
             k--;
         }
-        if(ganhou && tab[i][j+1][k-1] == 0){
-                *lin = i;
-                *col = j+1;
-                return ganhou;
-        }
+        if(ganhou && zeroCount == 1) return ganhou;
     }
 
     ganhou = TRUE;
+    zeroCount = 0;
     for(int i = 0; i < n; i++){
         int j = 0;
         int k = 0;
-        for(int a = 0; a < n -1; a++){
-            if(tab[j][i][k]!= cor){
-                ganhou = FALSE;
-                break;
-            }
+        for(int a = 0; a < n; a++){
+            if(tab[j][i][k] == -1 *cor){
+                    ganhou = FALSE;
+                    break;
+                }
+                if(tab[j][j][k] == 0){
+                    zeroCount++;
+                    *lin = j;
+                    *col = i;
+                    if(zeroCount > 1){
+                        ganhou = FALSE;
+                        break;
+                    }
+                }
             j++;
             k++;
         }
-        if(ganhou && tab[j+1][i][k+1] == 0){
-                *lin = j+1;
-                *col = i;
-                return ganhou;
-        }
+        if(ganhou && zeroCount == 1) return ganhou;if(ganhou) return ganhou;
 
         ganhou = TRUE;
+        zeroCount = 0;
         j = 0;
         k = n-1;
-        for(int a = 0; a < n -1; a++){
-            if(tab[j][i][k]!= cor){
-                ganhou = FALSE;
-                break;
-            }
+        for(int a = 0; a < n; a++){
+            if(tab[j][i][k] == -1 *cor){
+                    ganhou = FALSE;
+                    break;
+                }
+                if(tab[j][j][k] == 0){
+                    zeroCount++;
+                    *lin = j;
+                    *col = i;
+                    if(zeroCount > 1){
+                        ganhou = FALSE;
+                        break;
+                    }
+                }
             j++;
             k--;
         }
-        if(ganhou && tab[j+1][i][k-1] == 0){
-                *lin = j+1;
-                *col = i;
-                return ganhou;
-        }
+        if(ganhou && zeroCount == 1) return ganhou;
     }
 
     ganhou = TRUE;
+    zeroCount = 0;
     for(int i = 0; i < n; i++){
         int j = 0;
         int k = 0;
-        for(int a = 0; a < n-1; a++){
-            if(tab[k][j][i]!= cor){
-                ganhou = FALSE;
-                break;
-            }
+        for(int a = 0; a < n; a++){
+            if(tab[k][j][i] == -1 *cor){
+                    ganhou = FALSE;
+                    break;
+                }
+                if(tab[k][j][i]  == 0){
+                    zeroCount++;
+                    *lin = k;
+                    *col = j;
+                    if(zeroCount > 1){
+                        ganhou = FALSE;
+                        break;
+                    }
+                }
             j++;
             k++;
         }
-        if(ganhou && tab[k+1][j+1][i] == 0){
-                *lin = k+1;
-                *col = j+1;
-                return ganhou;
-        }
+        if(ganhou && zeroCount == 1) return ganhou;
 
         ganhou = TRUE;
+        zeroCount = 0;
         j = 0;
         k = n-1;
-        for(int a = 0; a < n -1; a++){
-            if(tab[k][j][i]!= cor){
-                ganhou = FALSE;
-                break;
-            }
+        for(int a = 0; a < n; a++){
+            if(tab[k][j][i] == -1 *cor){
+                    ganhou = FALSE;
+                    break;
+                }
+                if(tab[k][j][i]  == 0){
+                    zeroCount++;
+                    *lin = k;
+                    *col = j;
+                    if(zeroCount > 1){
+                        ganhou = FALSE;
+                        break;
+                    }
+                }
             j++;
             k--;
         }
-        if(ganhou && tab[k-1][j+1][i] == 0){
-                *lin = k-1;
-                *col = j+1;
-                return ganhou;
-        }
+        if(ganhou && zeroCount == 1) return ganhou;
     }
     return ganhou;
 }
+
 int checaGanhador(int *** tab, int n, int cor){
     //Checando Rows
     int ganhou = TRUE;
@@ -400,7 +480,7 @@ int checaGanhador(int *** tab, int n, int cor){
     for(int i = 0; i < n; i++){
         for(int j = 0; j < n; j++){
             for(int k = 0; k < n; k++){
-                if(tab[i][k][i] != cor){
+                if(tab[i][k][j] != cor){
                     ganhou = FALSE;
                     break;
                 }
