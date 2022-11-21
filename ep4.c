@@ -10,6 +10,8 @@ int getZ(int *** tab, int n, int *lin, int *col);
 int checaGanhador(int *** tab, int n, int cor);
 int podeGanhar(int ***tab, int n, int cor, int *lin, int *col);
 int jogarDiagonal(int ***tab, int n, int cor, int *lin, int *col);
+int escolheQualquerUma(int ***tab, int n, int cor, int *lin, int *col);
+int bestPlay(int ***tab, int n, int cor, int *lin, int *col);
 
 int main(){
     int n;
@@ -39,6 +41,7 @@ int main(){
     pc = -1 * jogador;
 
     int count = 0;
+
     while(!fim){
         count++;
         if(vez == jogador){
@@ -63,8 +66,7 @@ int main(){
         vez *= -1;
     
     }
-    printf("\n%d", tab[0][0][0]);
-    printf("\n%d", tab[0][0][1]);
+    
 
     return 0;
 
@@ -114,7 +116,7 @@ int escolheJogada (int *** tab, int n, int cor, int *lin, int *col){
 
     if(jogarDiagonal(tab, n, cor,lin, col))
         return getZ(tab, n, lin, col);
-        
+
     //checando cantos livres
     if(tab[0][0][0] == 0){
         *lin = 0;
@@ -136,11 +138,15 @@ int escolheJogada (int *** tab, int n, int cor, int *lin, int *col){
         *col = n-1;
         return getZ(tab, n, lin, col);
     }
+
+    if(bestPlay(tab,n,cor,lin,col))
+        return getZ(tab, n, lin, col);
     
+    if(escolheQualquerUma(tab,n,cor,lin,col))
+        return getZ(tab, n, lin, col);
     
-    
-    printf("Não consegui escolher uma jogada :(\n");
     return n;
+    
 }
 
 int jogarDiagonal(int ***tab, int n, int cor, int *lin, int *col){
@@ -296,6 +302,33 @@ int jogarDiagonal(int ***tab, int n, int cor, int *lin, int *col){
     }
 }
 
+
+int escolheQualquerUma(int ***tab, int n, int cor, int *lin, int *col){
+    printf("vou esoclher qualquer uma fds\n");
+    int tempLin;
+    int tempCol;
+    int achou = FALSE;
+    for(int i = 0; i < n; i++){
+        for(int j = 0; j < n; j++){
+            if(tab[i][j][n-1] == 0){
+                achou = TRUE;
+                tempLin = i;
+                tempCol = j;
+                tab[i][j][getZ(tab, n, &i,&j)] = cor;
+                if(!podeGanhar(tab,n, -1 * cor, lin, col)){
+                    *lin = i;
+                    *col = j;
+                    tab[i][j][getZ(tab, n, &i,&j)] = 0;
+                    return TRUE;
+                }
+                tab[i][j][getZ(tab, n, &i,&j)] = 0;
+            }
+        }
+    }
+    *lin = tempLin;
+    *col = tempCol;
+    return achou;
+}
 int podeGanhar(int ***tab, int n, int cor, int *lin, int *col){
     int zeroCount;
     //Checando Rows
@@ -625,6 +658,371 @@ int podeGanhar(int ***tab, int n, int cor, int *lin, int *col){
     return ganhou;
 }
 
+int bestPlay(int ***tab, int n, int cor, int *lin, int *col){
+    printf("Deixa eu pensar hummm...\n");
+    int zeroCount;
+    int tempLin;
+    int tempCol;
+    int maxCount = 0;
+    //Checando Rows
+    int ganhou = TRUE;
+    zeroCount = 0;
+    
+    for(int i = 0; i < n; i++){
+        for(int j = 0; j < n; j++){
+            ganhou = TRUE;
+            zeroCount = 0;
+            for(int k = 0; k < n; k++){
+                if(tab[i][j][k] == -1 *cor){
+                    ganhou = FALSE;
+                    zeroCount = 0;
+                    break;
+                }
+                if(tab[i][j][k] == 0){
+                    zeroCount++;
+                    *lin = i;
+                    *col = j;
+                    
+                }
+            }
+            if(zeroCount > maxCount){
+                maxCount = zeroCount;
+                tempLin = i;
+                tempCol = j;
+            }
+        }
+    }
+
+    ganhou = TRUE;
+    zeroCount = 0;
+    for(int i = 0; i < n; i++){
+        for(int j = 0; j < n; j++){
+            ganhou = TRUE;
+            zeroCount = 0;
+            for(int k = 0; k < n; k++){
+                if(tab[k][i][j] == -1 *cor){
+                    ganhou = FALSE;
+                    zeroCount = 0;
+                    break;
+                }
+                if(tab[k][i][j] == 0){
+                    zeroCount++;
+                    *lin = k;
+                    *col = i;
+                }
+            }
+            if(zeroCount > maxCount){
+                maxCount = zeroCount;
+                tempLin = *lin;
+                tempCol = *col;
+            }
+        }
+    }
+
+    ganhou = TRUE;
+    zeroCount = 0;
+    for(int i = 0; i < n; i++){
+        for(int j = 0; j < n; j++){
+            ganhou = TRUE;
+            zeroCount = 0;
+            for(int k = 0; k < n; k++){
+                if(tab[i][k][j] == -1 *cor){
+                    ganhou = FALSE;
+                    zeroCount = 0;
+                    break;
+                }
+                if(tab[i][k][j] == 0){
+                    zeroCount++;
+                    *lin = i;
+                    *col = k;
+                    
+                }
+            }
+            if(zeroCount > maxCount){
+                maxCount = zeroCount;
+                tempLin = *lin;
+                tempCol = *col;
+            }
+        }
+    }
+
+    //Checando as 4 diagonais do cubo
+    int startLin = 0;
+    int startCol = 0;
+
+    ganhou = TRUE;
+    zeroCount = 0;
+    for(int i = 0; i < n; i++){
+        if(tab[startLin][startCol][i] == -1 *cor){
+                    ganhou = FALSE;
+                    zeroCount = 0;
+                    break;
+                }
+                if(tab[startLin][startCol][i] == 0){
+                    zeroCount++;
+                    *lin = startLin;
+                    *col = startCol;
+                    
+                }
+        startLin++;
+        startCol++;
+    }
+    if(zeroCount > maxCount){
+        maxCount = zeroCount;
+        tempLin = *lin;
+        tempCol = *col;
+    }
+
+    startLin = 0;
+    startCol = n-1;
+
+    ganhou = TRUE;
+    zeroCount = 0;
+    for(int i = 0; i < n; i++){
+        if(tab[startLin][startCol][i] == -1 *cor){
+                    ganhou = FALSE;
+                    zeroCount = 0;
+                    break;
+                }
+                if(tab[startLin][startCol][i] == 0){
+                    zeroCount++;
+                    *lin = startLin;
+                    *col = startCol;
+                    
+                }
+        startLin++;
+        startCol--;
+    }
+    if(zeroCount > maxCount){
+        maxCount = zeroCount;
+        tempLin = *lin;
+        tempCol = *col;
+    }
+
+    startLin = n-1;
+    startCol = 0;
+
+    ganhou = TRUE;
+    zeroCount = 0;
+    for(int i = 0; i < n; i++){
+        if(tab[startLin][startCol][i] == -1 *cor){
+                    ganhou = FALSE;
+                    zeroCount = 0;
+                    break;
+                }
+                if(tab[startLin][startCol][i] == 0){
+                    zeroCount++;
+                    *lin = startLin;
+                    *col = startCol;
+                    
+                }
+        startLin--;
+        startCol++;
+    }
+    if(zeroCount > maxCount){
+            maxCount = zeroCount;
+            tempLin = *lin;
+            tempCol = *col;
+        }
+
+    startLin = n-1;
+    startCol = n-1;
+
+    ganhou = TRUE;
+    zeroCount = 0;
+    for(int i = 0; i < n; i++){
+        if(tab[startLin][startCol][i] == -1 *cor){
+                    ganhou = FALSE;
+                    zeroCount = 0;
+                    break;
+                }
+                if(tab[startLin][startCol][i] == 0){
+                    zeroCount++;
+                    *lin = startLin;
+                    *col = startCol;
+                    
+                }
+        startLin--;
+        startCol--;
+    }
+    if(zeroCount > maxCount){
+        maxCount = zeroCount;
+        tempLin = *lin;
+        tempCol = *col;
+    }
+
+    //Checando diagonais das  9 faces
+    ganhou = TRUE;
+    zeroCount = 0;
+    for(int i = 0; i < n; i++){
+        int j = 0;
+        int k = 0;
+        ganhou = TRUE;
+        zeroCount = 0;
+        for(int a = 0; a < n; a++){
+            if(tab[i][j][k] == -1 *cor){
+                    ganhou = FALSE;
+                    zeroCount = 0;
+                    break;
+                }
+                if(tab[i][j][k] == 0){
+                    zeroCount++;
+                    *lin = i;
+                    *col = j;
+    
+                }
+            j++;
+            k++;
+        }
+        if(zeroCount > maxCount){
+        maxCount = zeroCount;
+        tempLin = *lin;
+        tempCol = *col;
+    }
+
+        ganhou = TRUE;
+        zeroCount = 0;
+        j = 0;
+        k = n-1;
+        for(int a = 0; a < n; a++){
+            if(tab[i][j][k] == -1 *cor){
+                    ganhou = FALSE;
+                    zeroCount = 0;
+                    break;
+                }
+                if(tab[i][j][k] == 0){
+                    zeroCount++;
+                    *lin = i;
+                    *col = j;
+                
+                }
+            j++;
+            k--;
+        }
+        if(zeroCount > maxCount){
+        maxCount = zeroCount;
+        tempLin = *lin;
+        tempCol = *col;
+    }
+    }
+
+    ganhou = TRUE;
+    zeroCount = 0;
+    for(int i = 0; i < n; i++){
+        int j = 0;
+        int k = 0;
+        ganhou = TRUE;
+        zeroCount = 0;
+        for(int a = 0; a < n; a++){
+            if(tab[j][i][k] == -1 *cor){
+                    ganhou = FALSE;
+                    zeroCount = 0;
+                    break;
+                }
+                if(tab[j][i][k] == 0){
+                    zeroCount++;
+                    *lin = j;
+                    *col = i;
+                    
+                }
+            j++;
+            k++;
+        }
+        if(zeroCount > maxCount){
+        maxCount = zeroCount;
+        tempLin = *lin;
+        tempCol = *col;
+    }
+
+        ganhou = TRUE;
+        zeroCount = 0;
+        j = 0;
+        k = n-1;
+        for(int a = 0; a < n; a++){
+            if(tab[j][i][k] == -1 *cor){
+                    ganhou = FALSE;
+                    zeroCount = 0;
+                    break;
+                }
+                if(tab[j][i][k] == 0){
+                    zeroCount++;
+                    *lin = j;
+                    *col = i;
+                    
+                }
+            j++;
+            k--;
+        }
+        if(zeroCount > maxCount){
+        maxCount = zeroCount;
+        tempLin = *lin;
+        tempCol = *col;
+    }
+    }
+
+    ganhou = TRUE;
+    zeroCount = 0;
+    for(int i = 0; i < n; i++){
+        int j = 0;
+        int k = 0;
+        ganhou = TRUE;
+        zeroCount = 0;
+        for(int a = 0; a < n; a++){
+            if(tab[k][j][i] == -1 *cor){
+                    ganhou = FALSE;
+                    zeroCount = 0;
+                    break;
+                }
+                if(tab[k][j][i]  == 0){
+                    zeroCount++;
+                    *lin = k;
+                    *col = j;
+                    
+                }
+            j++;
+            k++;
+        }
+        if(zeroCount > maxCount){
+        maxCount = zeroCount;
+        tempLin = *lin;
+        tempCol = *col;
+    }
+
+        ganhou = TRUE;
+        zeroCount = 0;
+        j = 0;
+        k = n-1;
+        for(int a = 0; a < n; a++){
+            if(tab[k][j][i] == -1 *cor){
+                    ganhou = FALSE;
+                    zeroCount = 0;
+                    break;
+                }
+                if(tab[k][j][i]  == 0){
+                    zeroCount++;
+                    *lin = k;
+                    *col = j;
+                    
+                }
+            j++;
+            k--;
+        }
+        if(zeroCount > maxCount){
+        maxCount = zeroCount;
+        tempLin = *lin;
+        tempCol = *col;
+    }
+    }
+    if(maxCount == 0) return FALSE;
+    *lin = tempLin;
+    *col = tempCol;
+    return TRUE;
+}
+
+
+int jogadaValida(int ***tab, int n, int cor, int *lin, int *col){
+
+}
 int checaGanhador(int *** tab, int n, int cor){
     //Checando Rows
     //printf("Rows1\n");
