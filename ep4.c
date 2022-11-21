@@ -42,6 +42,15 @@ int main(){
 
     int count = 0;
 
+    // tab[3][1][0] = 1;
+    // tab[3][1][1] = 1;
+    // tab[3][1][2] = 1;
+    
+
+    // fim = podeGanhar(tab,n,1,&lin,&col);
+    // printf("OLHA O FIM %d",fim);
+    // printf("%d %d\n", lin, col);
+
     while(!fim){
         count++;
         if(vez == jogador){
@@ -58,7 +67,7 @@ int main(){
                 fim = TRUE;
             else{
                 tab[lin][col][z] = pc;
-                printf("Jogou %d %d \n", lin, col);
+                printf("Jogou %d %d \n", lin , col);
             }
         }
         fim = checaGanhador(tab,n, vez);
@@ -86,8 +95,11 @@ int escolheJogada (int *** tab, int n, int cor, int *lin, int *col){
     
     //checar se tem n³ bolinhas
     //Se puder ganhar , ganhe
-    if(podeGanhar(tab, n, cor,lin, col))
+
+    if(podeGanhar(tab, n, cor,lin, col)){
+        printf("vou ganha hahaha \n");
         return getZ(tab, n, lin, col);
+    }
     if(podeGanhar(tab, n, -1 * cor ,lin, col)){
         printf("Vai ganhar não cara\n");
         return getZ(tab, n, lin, col);}
@@ -103,6 +115,7 @@ int escolheJogada (int *** tab, int n, int cor, int *lin, int *col){
     }
     
     //Checando os cantos livres não bloqueados na diagonal
+    printf("Canto com diagonal livreee\n");
     if(tab[0][0][0] == 0 && tab[n-1][n-1][0] == 0){
         *lin = 0;
         *col = 0;
@@ -117,6 +130,7 @@ int escolheJogada (int *** tab, int n, int cor, int *lin, int *col){
     if(jogarDiagonal(tab, n, cor,lin, col))
         return getZ(tab, n, lin, col);
 
+    printf("Canto livree\n");
     //checando cantos livres
     if(tab[0][0][0] == 0){
         *lin = 0;
@@ -335,6 +349,7 @@ int podeGanhar(int ***tab, int n, int cor, int *lin, int *col){
     int ganhou = TRUE;
     zeroCount = 0;
     
+    printf("fé que o erro ta aqui 1\n");
     for(int i = 0; i < n; i++){
         for(int j = 0; j < n; j++){
             ganhou = TRUE;
@@ -344,11 +359,11 @@ int podeGanhar(int ***tab, int n, int cor, int *lin, int *col){
                     ganhou = FALSE;
                     break;
                 }
-                if(tab[i][j][k] == 0){
+                if(tab[i][j][k] == 0 ){
                     zeroCount++;
                     *lin = i;
                     *col = j;
-                    if(zeroCount > 1){
+                    if(zeroCount > 1 || !(k == 0 ||tab[i][j][k-1] != 0)){
                         ganhou = FALSE;
                         break;
                     }
@@ -358,6 +373,7 @@ int podeGanhar(int ***tab, int n, int cor, int *lin, int *col){
         }
     }
 
+printf("fé que o erro ta aqui 2\n");
     ganhou = TRUE;
     zeroCount = 0;
     for(int i = 0; i < n; i++){
@@ -373,7 +389,7 @@ int podeGanhar(int ***tab, int n, int cor, int *lin, int *col){
                     zeroCount++;
                     *lin = k;
                     *col = i;
-                    if(zeroCount > 1){
+                    if(zeroCount > 1 || !(j == 0 ||tab[k][i][j-1] != 0)){
                         ganhou = FALSE;
                         break;
                     }
@@ -382,7 +398,7 @@ int podeGanhar(int ***tab, int n, int cor, int *lin, int *col){
             if(ganhou && zeroCount == 1) return ganhou;
         }
     }
-
+printf("fé que o erro ta aqui 3\n");
     ganhou = TRUE;
     zeroCount = 0;
     for(int i = 0; i < n; i++){
@@ -394,11 +410,11 @@ int podeGanhar(int ***tab, int n, int cor, int *lin, int *col){
                     ganhou = FALSE;
                     break;
                 }
-                if(tab[i][k][j] == 0){
+                if(tab[i][k][j] == 0 ){
                     zeroCount++;
                     *lin = i;
                     *col = k;
-                    if(zeroCount > 1){
+                    if(zeroCount > 1 || !(j == 0 ||tab[i][k][j-1] != 0)){
                         ganhou = FALSE;
                         break;
                     }
@@ -412,6 +428,7 @@ int podeGanhar(int ***tab, int n, int cor, int *lin, int *col){
     int startLin = 0;
     int startCol = 0;
 
+printf("fé que o erro ta aqui 4\n");
     ganhou = TRUE;
     zeroCount = 0;
     for(int i = 0; i < n; i++){
@@ -423,7 +440,7 @@ int podeGanhar(int ***tab, int n, int cor, int *lin, int *col){
                     zeroCount++;
                     *lin = startLin;
                     *col = startCol;
-                    if(zeroCount > 1){
+                    if(zeroCount > 1 || !(i == 0 ||tab[startLin][startCol][i-1] != 0)){
                         ganhou = FALSE;
                         break;
                     }
@@ -436,6 +453,7 @@ int podeGanhar(int ***tab, int n, int cor, int *lin, int *col){
     startLin = 0;
     startCol = n-1;
 
+printf("fé que o erro ta aqui 5\n");
     ganhou = TRUE;
     zeroCount = 0;
     for(int i = 0; i < n; i++){
@@ -443,11 +461,11 @@ int podeGanhar(int ***tab, int n, int cor, int *lin, int *col){
                     ganhou = FALSE;
                     break;
                 }
-                if(tab[startLin][startCol][i] == 0){
+                if(tab[startLin][startCol][i] == 0 ){
                     zeroCount++;
                     *lin = startLin;
                     *col = startCol;
-                    if(zeroCount > 1){
+                    if(zeroCount > 1 || !(i == 0 ||tab[startLin][startCol][i-1] != 0)){
                         ganhou = FALSE;
                         break;
                     }
@@ -460,6 +478,7 @@ int podeGanhar(int ***tab, int n, int cor, int *lin, int *col){
     startLin = n-1;
     startCol = 0;
 
+printf("fé que o erro ta aqui 6\n");
     ganhou = TRUE;
     zeroCount = 0;
     for(int i = 0; i < n; i++){
@@ -471,7 +490,7 @@ int podeGanhar(int ***tab, int n, int cor, int *lin, int *col){
                     zeroCount++;
                     *lin = startLin;
                     *col = startCol;
-                    if(zeroCount > 1){
+                    if(zeroCount > 1 || !(i == 0 ||tab[startLin][startCol][i-1] != 0)){
                         ganhou = FALSE;
                         break;
                     }
@@ -484,6 +503,7 @@ int podeGanhar(int ***tab, int n, int cor, int *lin, int *col){
     startLin = n-1;
     startCol = n-1;
 
+printf("fé que o erro ta aqui 7\n");
     ganhou = TRUE;
     zeroCount = 0;
     for(int i = 0; i < n; i++){
@@ -491,11 +511,11 @@ int podeGanhar(int ***tab, int n, int cor, int *lin, int *col){
                     ganhou = FALSE;
                     break;
                 }
-                if(tab[startLin][startCol][i] == 0){
+                if(tab[startLin][startCol][i] == 0 ){
                     zeroCount++;
                     *lin = startLin;
                     *col = startCol;
-                    if(zeroCount > 1){
+                    if(zeroCount > 1 || !(i == 0 ||tab[startLin][startCol][i-1] != 0)){
                         ganhou = FALSE;
                         break;
                     }
@@ -505,6 +525,7 @@ int podeGanhar(int ***tab, int n, int cor, int *lin, int *col){
     }
     if(ganhou && zeroCount == 1) return ganhou;
 
+printf("fé que o erro ta aqui 8\n");
     //Checando diagonais das  9 faces
     ganhou = TRUE;
     zeroCount = 0;
@@ -522,7 +543,7 @@ int podeGanhar(int ***tab, int n, int cor, int *lin, int *col){
                     zeroCount++;
                     *lin = i;
                     *col = j;
-                    if(zeroCount > 1){
+                    if(zeroCount > 1 || !(k == 0 ||tab[i][j][k-1] != 0)){
                         ganhou = FALSE;
                         break;
                     }
@@ -531,7 +552,7 @@ int podeGanhar(int ***tab, int n, int cor, int *lin, int *col){
             k++;
         }
         if(ganhou && zeroCount == 1) return ganhou;
-
+printf("fé que o erro ta aqui 9\n");
         ganhou = TRUE;
         zeroCount = 0;
         j = 0;
@@ -545,7 +566,7 @@ int podeGanhar(int ***tab, int n, int cor, int *lin, int *col){
                     zeroCount++;
                     *lin = i;
                     *col = j;
-                    if(zeroCount > 1){
+                    if(zeroCount > 1 || !(k == 0 ||tab[i][j][k-1] != 0)){
                         ganhou = FALSE;
                         break;
                     }
@@ -555,7 +576,7 @@ int podeGanhar(int ***tab, int n, int cor, int *lin, int *col){
         }
         if(ganhou && zeroCount == 1) return ganhou;
     }
-
+printf("fé que o erro ta aqui 10\n");
     ganhou = TRUE;
     zeroCount = 0;
     for(int i = 0; i < n; i++){
@@ -568,11 +589,11 @@ int podeGanhar(int ***tab, int n, int cor, int *lin, int *col){
                     ganhou = FALSE;
                     break;
                 }
-                if(tab[j][i][k] == 0){
+                if(tab[j][i][k] == 0  ){
                     zeroCount++;
                     *lin = j;
                     *col = i;
-                    if(zeroCount > 1){
+                    if(zeroCount > 1 || ! (k == 0 ||tab[j][i][k-1] != 0)){
                         ganhou = FALSE;
                         break;
                     }
@@ -581,7 +602,7 @@ int podeGanhar(int ***tab, int n, int cor, int *lin, int *col){
             k++;
         }
         if(ganhou && zeroCount == 1) return ganhou;if(ganhou) return ganhou;
-
+printf("fé que o erro ta aqui 11\n");
         ganhou = TRUE;
         zeroCount = 0;
         j = 0;
@@ -595,7 +616,7 @@ int podeGanhar(int ***tab, int n, int cor, int *lin, int *col){
                     zeroCount++;
                     *lin = j;
                     *col = i;
-                    if(zeroCount > 1){
+                    if(zeroCount > 1 || !(k == 0 ||tab[j][i][k-1] != 0)){
                         ganhou = FALSE;
                         break;
                     }
@@ -605,7 +626,7 @@ int podeGanhar(int ***tab, int n, int cor, int *lin, int *col){
         }
         if(ganhou && zeroCount == 1) return ganhou;
     }
-
+printf("fé que o erro ta aqui 12\n");
     ganhou = TRUE;
     zeroCount = 0;
     for(int i = 0; i < n; i++){
@@ -618,11 +639,11 @@ int podeGanhar(int ***tab, int n, int cor, int *lin, int *col){
                     ganhou = FALSE;
                     break;
                 }
-                if(tab[k][j][i]  == 0){
+                if(tab[k][j][i]  == 0 ){
                     zeroCount++;
                     *lin = k;
                     *col = j;
-                    if(zeroCount > 1){
+                    if(zeroCount > 1 || !(i == 0 ||tab[k][j][i-1] != 0)){
                         ganhou = FALSE;
                         break;
                     }
@@ -631,7 +652,7 @@ int podeGanhar(int ***tab, int n, int cor, int *lin, int *col){
             k++;
         }
         if(ganhou && zeroCount == 1) return ganhou;
-
+printf("fé que o erro ta aqui 13\n");
         ganhou = TRUE;
         zeroCount = 0;
         j = 0;
@@ -645,7 +666,7 @@ int podeGanhar(int ***tab, int n, int cor, int *lin, int *col){
                     zeroCount++;
                     *lin = k;
                     *col = j;
-                    if(zeroCount > 1){
+                    if(zeroCount > 1 || !(i == 0 ||tab[k][j][i-1] != 0)){
                         ganhou = FALSE;
                         break;
                     }
