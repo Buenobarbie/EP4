@@ -5,90 +5,17 @@
 #define FALSE 0
 #define TRUE 1
 
-
-/*
-Caro corretor, devido à empolgação com a competição eu fui adiconando várias funções gigantes, a 
-cada chance de aprimorar, que são cópias da minha função checaGanhador, 
-mas com alterações. Sei que não está clean code mas está divertido. Adiconei comentários em 
-cada uma delas para entender o que ela faz.Os comentários das funções checaGanhador e escolheJogada
-estão bem informativos em todo o corpo da função. Já as demais funções eu adiconei uma explicação
-no início, mas não hpa comentários relevantes no corpo.
-*/
-
-int escolheJogada (int *** tab, int n, int cor, int *lin, int *col);
-int getZ(int *** tab, int n, int *lin, int *col);
-int checaGanhador(int *** tab, int n, int cor);
-int podeGanhar(int ***tab, int n, int cor, int *lin, int *col);
-int jogarDiagonal(int ***tab, int n, int cor, int *lin, int *col);
-int escolheQualquerUma(int ***tab, int n, int cor, int *lin, int *col);
-int bestPlay(int ***tab, int n, int cor, int *lin, int *col);
-int naoCaiNoBait(int ***tab, int n, int cor, int *lin, int *col);
+int escolheJogada13679530 (int *** tab, int n, int cor, int *lin, int *col);
+int getZ13679530(int *** tab, int n, int *lin, int *col);
+int checaGanhador13679530(int *** tab, int n, int cor);
+int podeGanhar13679530(int ***tab, int n, int cor, int *lin, int *col);
+int jogarDiagonal13679530(int ***tab, int n, int cor, int *lin, int *col);
+int escolheQualquerUma13679530(int ***tab, int n, int cor, int *lin, int *col);
+int bestPlay13679530(int ***tab, int n, int cor, int *lin, int *col);
+int naoCaiNoBait13679530(int ***tab, int n, int cor, int *lin, int *col);
 
 
-int main(){
-    int n;
-    int ***tab;
-    int jogadorHumano;
-    int jogadorMaquina;
-    int fim = FALSE;
-    int vez = PRETA;
-    int lin;
-    int col;
-    int z;
-
-    printf("Digite o valor de N: ");
-    scanf("%d", &n);
-
-    /* Criando o tabuleiro */
-    /* tab[x][y][z] */
-    /* tab[lin][col][z] */
-    tab = malloc(sizeof(int**)* n);
-    for(int i = 0; i < n; i++){
-        tab[i] = malloc(sizeof(int*)* n);
-        for(int j = 0; j < n; j++)
-            tab[i][j] = malloc(sizeof(int) * n);
-    }
-
-    printf("Você quer jogar como PRETAs[1] ou Azuis[-1]? ");
-    scanf("%d", &jogadorHumano);
-
-    /* O jogadorMaquina é do time contrário ao do jogadorHumano*/
-    jogadorMaquina = -1 * jogadorHumano;
-
-    /*Enquanto ninguém ganhar nem preenher tudo, pegar as jogadas*/
-    while(!fim){
-        /*Recebe a jogada do jogadorHumano*/
-        if(vez == jogadorHumano){
-            printf("Digite a linha[x] e a coluna[y] que deseja jogar: ");
-            scanf("%d %d", &lin, &col);
-            z = getZ(tab, n, &lin, &col);
-            tab[lin][col][z] = jogadorHumano;
-        }
-        /*Recbe a jogada do jogadorMAquina e printa ela*/
-        else{
-            z = escolheJogada(tab, n , jogadorMaquina, &lin, &col);
-            /* Se a escolheJogada retorar n, então o jogo acabou*/
-            if(z == n)
-                fim = TRUE;
-            else{
-                tab[lin][col][z] = jogadorMaquina;
-                printf("Maquina jogou %d %d \n\n", lin , col);
-            }
-        }
-        /*Checa a cada rodada se alguém ganhou*/
-        fim = checaGanhador(tab,n, vez);
-        if(fim) printf("Fim do jogo!\n");
-
-        /*Passa pra vez do próximo jogador*/
-        vez *= -1;
-    
-    }
-    
-    return 0;
-
-}
-
-int getZ(int *** tab, int n,  int *lin, int *col){
+int getZ13679530(int *** tab, int n,  int *lin, int *col){
     /* Retorna o plano z em que a pecinha ira cair
     de acordo com a linha e a coluna informadas*/
 
@@ -99,20 +26,20 @@ int getZ(int *** tab, int n,  int *lin, int *col){
     return z;
 }
 
-int escolheJogada (int *** tab, int n, int cor, int *lin, int *col){
+int escolheJogada13679530 (int *** tab, int n, int cor, int *lin, int *col){
     /* Função que pensa no melhor lugar para se jogar,
     seguindo uma prioridade de estratégias que eu pensei
     quando fui jogando o 3x3x3 e o 4x4x4 contra outras pessoas*/
 
     /* Se falta só uma posição pra eu ganhar,
     jogar nessa posição e ganhar*/
-    if(podeGanhar(tab, n, cor,lin, col)){
-        return getZ(tab, n, lin, col);
+    if(podeGanhar13679530(tab, n, cor,lin, col)){
+        return getZ13679530(tab, n, lin, col);
     }
     /* Se falta só uma posição pro oponente ganhar,
     jogar nessa posição e impedir ele*/
-    if(podeGanhar(tab, n, -1 * cor ,lin, col)){
-        return getZ(tab, n, lin, col);}
+    if(podeGanhar13679530(tab, n, -1 * cor ,lin, col)){
+        return getZ13679530(tab, n, lin, col);}
     
 
     /* Quando o tabuleiro for ímpar, jogar na posição central*/
@@ -120,32 +47,32 @@ int escolheJogada (int *** tab, int n, int cor, int *lin, int *col){
         if(tab[n/2][n/2][0] == 0){
             *lin = n/2;
             *col = n/2;
-            return getZ(tab, n, lin, col);
+            return getZ13679530(tab, n, lin, col);
         }
     }
 
     /* Verifcar se o jogador está prestes a fazer uma armadilha
     e impedir (ler descrição da função)*/
-    if(naoCaiNoBait(tab,n,-1*cor,lin,col))
-        return getZ(tab, n, lin, col);
+    if(naoCaiNoBait13679530(tab,n,-1*cor,lin,col))
+        return getZ13679530(tab, n, lin, col);
     
     /* Jogar nos cantos que não estejam diagonalmente opostos 
     a uma peça do oponente*/
     if(tab[0][0][0] == 0 && tab[n-1][n-1][0] != -1 * cor){
         *lin = 0;
         *col = 0;
-        return getZ(tab, n, lin, col);
+        return getZ13679530(tab, n, lin, col);
     }
     if(tab[0][n-1][0] == 0 && tab[n-1][0][0] != -1 * cor){
         *lin = 0;
         *col = n-1;
-        return getZ(tab, n, lin, col);
+        return getZ13679530(tab, n, lin, col);
     }
 
     /* Joga preenchendo posições para ganhar na diagonal,
     quando possivel (ler descrição da função)*/
-    if(jogarDiagonal(tab, n, cor,lin, col))
-        return getZ(tab, n, lin, col);
+    if(jogarDiagonal13679530(tab, n, cor,lin, col))
+        return getZ13679530(tab, n, lin, col);
 
 
 
@@ -153,41 +80,41 @@ int escolheJogada (int *** tab, int n, int cor, int *lin, int *col){
     if(tab[0][0][0] == 0){
         *lin = 0;
         *col = 0;
-        return getZ(tab, n, lin, col);
+        return getZ13679530(tab, n, lin, col);
     }
     if(tab[0][n-1][0] == 0){
         *lin = 0;
         *col = n-1;
-        return getZ(tab, n, lin, col);
+        return getZ13679530(tab, n, lin, col);
     }
     if(tab[n-1][0][0] == 0){
         *lin = n-1;
         *col = 0;
-        return getZ(tab, n, lin, col);
+        return getZ13679530(tab, n, lin, col);
     }
     if(tab[n-1][n-1][0] == 0){
         *lin = n-1;
         *col = n-1;
-        return getZ(tab, n, lin, col);
+        return getZ13679530(tab, n, lin, col);
     }
 
     /* Se acabou as estrategias, jogar em fileiras
     que já tenham pessas minhas e não tenham nenhuma do oponente
     (ler descrição da função)*/
-    if(bestPlay(tab,n,cor,lin,col))
-        return getZ(tab, n, lin, col);
+    if(bestPlay13679530(tab,n,cor,lin,col))
+        return getZ13679530(tab, n, lin, col);
     
     /* Se a função de cima não achou nenhuma fileira não bloqueada,
     jogar na primeira posição válida que achar*/
-    if(escolheQualquerUma(tab,n,cor,lin,col))
-        return getZ(tab, n, lin, col);
+    if(escolheQualquerUma13679530(tab,n,cor,lin,col))
+        return getZ13679530(tab, n, lin, col);
     
     /* Se a função acima não achou nenhuma posição válida, acabaram as*/
     return n;
     
 }
 
-int checaGanhador(int *** tab, int n, int cor){
+int checaGanhador13679530(int *** tab, int n, int cor){
     /*Passa por todas as possibilidades de se alinhas N
     em um tabuleiro NXNxN e checa se a cor dada ganhou*/
 
@@ -400,7 +327,7 @@ int checaGanhador(int *** tab, int n, int cor){
 
 }
 
-int jogarDiagonal(int ***tab, int n, int cor, int *lin, int *col){
+int jogarDiagonal13679530(int ***tab, int n, int cor, int *lin, int *col){
     /* Utiliza a parte de checagem das diagonais da função checaGanahdor
     Ele checa se a posição embaixo da posição que compõe a diagonal está ocupada
     com uma bolinha. Se estiver, ele joga nessa posição, e a bolinha cairá
@@ -558,8 +485,8 @@ int jogarDiagonal(int ***tab, int n, int cor, int *lin, int *col){
     }
 }
 
-int podeGanhar(int ***tab, int n, int cor, int *lin, int *col){
-    /* Função que utiliza a passagem por alinhamentos da função checaGanhador
+int podeGanhar13679530(int ***tab, int n, int cor, int *lin, int *col){
+    /* Função que utiliza a passagem por alinhamentos da função checaGanhador13679530
     e indica caso falte apenas uma bolinha para completar o alinhamento 
     da cor selecionada a casinha correspondente*/
 
@@ -886,8 +813,8 @@ int podeGanhar(int ***tab, int n, int cor, int *lin, int *col){
     return ganhou;
 }
 
-int naoCaiNoBait(int ***tab, int n, int cor, int *lin, int *col){
-    /* Essa função utiliza a mesma estrutura da função podeGanhar, passando
+int naoCaiNoBait13679530(int ***tab, int n, int cor, int *lin, int *col){
+    /* Essa função utiliza a mesma estrutura da função podeGanhar13679530, passando
     por todos os alinhamentos possíveis e vendo se o jogador tem N-2 bolinha em 
     um mesmo alunhamento que não esteja impedido (Não tenha uma bolinha minha).
     Se ele tiver pelo menos dois alinhamentos assim, há chances de ele colocar
@@ -1278,7 +1205,7 @@ int naoCaiNoBait(int ***tab, int n, int cor, int *lin, int *col){
     return TRUE;
 }
 
-int escolheQualquerUma(int ***tab, int n, int cor, int *lin, int *col){
+int escolheQualquerUma13679530(int ***tab, int n, int cor, int *lin, int *col){
     /* Escolhe a primeira posição válida que encontrar. No entanto , checa 
     se o oponente pode ganhar na próxima jogada com a jogada escolhida e 
     muda em caso positivo*/
@@ -1292,14 +1219,14 @@ int escolheQualquerUma(int ***tab, int n, int cor, int *lin, int *col){
                 achou = TRUE;
                 tempLin = i;
                 tempCol = j;
-                tab[i][j][getZ(tab, n, &i,&j)] = cor;
-                if(!podeGanhar(tab,n, -1 * cor, lin, col)){
+                tab[i][j][getZ13679530(tab, n, &i,&j)] = cor;
+                if(!podeGanhar13679530(tab,n, -1 * cor, lin, col)){
                     *lin = i;
                     *col = j;
-                    tab[i][j][getZ(tab, n, &i,&j)] = 0;
+                    tab[i][j][getZ13679530(tab, n, &i,&j)] = 0;
                     return TRUE;
                 }
-                tab[i][j][getZ(tab, n, &i,&j)] = 0;
+                tab[i][j][getZ13679530(tab, n, &i,&j)] = 0;
             }
         }
     }
@@ -1308,9 +1235,9 @@ int escolheQualquerUma(int ***tab, int n, int cor, int *lin, int *col){
     return achou;
 }
 
-int bestPlay(int ***tab, int n, int cor, int *lin, int *col){
+int bestPlay13679530(int ***tab, int n, int cor, int *lin, int *col){
     /*Função que utiliza a passagem pelos alinhamentos da função
-    checaGanhador e analisa quais alinhamentos ainda não estão impedidos (com
+    checaGanhador13679530 e analisa quais alinhamentos ainda não estão impedidos (com
     uma bolinha do oponente) e escolhe o com mais bolinhas minhas para jogar*/
 
     int zeroCount;
