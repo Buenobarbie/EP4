@@ -6,14 +6,6 @@
 #define TRUE 1
 
 
-/*
-Caro corretor, devido à empolgação com a competição eu fui adiconando várias funções gigantes, a 
-cada chance de aprimorar, que são cópias da minha função checaGanhador, 
-mas com alterações. Sei que não está clean code mas está divertido. Adiconei comentários em 
-cada uma delas para entender o que ela faz.Os comentários das funções checaGanhador e escolheJogada
-estão bem informativos em todo o corpo da função. Já as demais funções eu adiconei uma explicação
-no início, mas não hpa comentários relevantes no corpo.
-*/
 
 int escolheJogada (int *** tab, int n, int cor, int *lin, int *col);
 int getZ(int *** tab, int n, int *lin, int *col);
@@ -107,16 +99,19 @@ int escolheJogada (int *** tab, int n, int cor, int *lin, int *col){
     /* Se falta só uma posição pra eu ganhar,
     jogar nessa posição e ganhar*/
     if(podeGanhar(tab, n, cor,lin, col)){
+        printf("vou ganhar hahaha\n");
         return getZ(tab, n, lin, col);
     }
     /* Se falta só uma posição pro oponente ganhar,
     jogar nessa posição e impedir ele*/
     if(podeGanhar(tab, n, -1 * cor ,lin, col)){
+        printf("Vai ganhar nao cara\n");
         return getZ(tab, n, lin, col);}
     
 
     /* Quando o tabuleiro for ímpar, jogar na posição central*/
     if(n%2 == 1){
+        printf("Deixa eu colocar na central aqui\n");
         if(tab[n/2][n/2][0] == 0){
             *lin = n/2;
             *col = n/2;
@@ -126,11 +121,13 @@ int escolheJogada (int *** tab, int n, int cor, int *lin, int *col){
 
     /* Verifcar se o jogador está prestes a fazer uma armadilha
     e impedir (ler descrição da função)*/
-    if(naoCaiNoBait(tab,n,-1*cor,lin,col))
-        return getZ(tab, n, lin, col);
+    if(naoCaiNoBait(tab,n,-1*cor,lin,col)){
+        printf("Que isso ta biruleibe? Eu nao caio em bait\n");
+        return getZ(tab, n, lin, col);}
     
     /* Jogar nos cantos que não estejam diagonalmente opostos 
     a uma peça do oponente*/
+    printf("Cantooo livree\n");
     if(tab[0][0][0] == 0 && tab[n-1][n-1][0] != -1 * cor){
         *lin = 0;
         *col = 0;
@@ -144,11 +141,12 @@ int escolheJogada (int *** tab, int n, int cor, int *lin, int *col){
 
     /* Joga preenchendo posições para ganhar na diagonal,
     quando possivel (ler descrição da função)*/
-    if(jogarDiagonal(tab, n, cor,lin, col))
-        return getZ(tab, n, lin, col);
+    if(jogarDiagonal(tab, n, cor,lin, col)){
+        printf("Preencher umas diagonais aqui e ali\n");
+        return getZ(tab, n, lin, col);}
 
 
-
+    printf("Cantooooo\n");
     /* Se ainda houver cantos livres no plano z = 0, jogar neles*/
     if(tab[0][0][0] == 0){
         *lin = 0;
@@ -174,13 +172,15 @@ int escolheJogada (int *** tab, int n, int cor, int *lin, int *col){
     /* Se acabou as estrategias, jogar em fileiras
     que já tenham pessas minhas e não tenham nenhuma do oponente
     (ler descrição da função)*/
-    if(bestPlay(tab,n,cor,lin,col))
-        return getZ(tab, n, lin, col);
+    if(bestPlay(tab,n,cor,lin,col)){
+        printf("Eu sou o mió\n");
+        return getZ(tab, n, lin, col);}
     
     /* Se a função de cima não achou nenhuma fileira não bloqueada,
     jogar na primeira posição válida que achar*/
-    if(escolheQualquerUma(tab,n,cor,lin,col))
-        return getZ(tab, n, lin, col);
+    if(escolheQualquerUma(tab,n,cor,lin,col)){
+        printf("vou escolher qualquer uma fds\n");
+        return getZ(tab, n, lin, col);}
     
     /* Se a função acima não achou nenhuma posição válida, acabaram as*/
     return n;
